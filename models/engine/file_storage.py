@@ -10,7 +10,7 @@ class FileStorage:
         file_path (str: private class attribute)
         objects (dict: private class attribute)
     """
-    __file_path = ""
+    __file_path = "file.json"
     __objects = {}
 
     def all(self):
@@ -32,7 +32,7 @@ class FileStorage:
     def save(self):
         """Serializes __objects to the JSON file (path: __file_path)"""
         with open(FileStorage.__file_path, mode='w') as f:
-            json.dump(obj.to_dict(), f)
+            json.dump(FileStorage.__objects, f)
 
     def reload(self):
         """
@@ -42,6 +42,6 @@ class FileStorage:
         """
         try:
             with open(FileStorage.__file_path, mode='r') as f:
-                __objetcs = json.load(f)
+                FileStorage.__objetcs = json.load(f)
         except Exception:
             pass
