@@ -27,6 +27,12 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(self.base1.created_at, self.base1.updated_at)
         self.assertNotEqual(self.base1.id, self.base2.id)
         self.assertNotEqual(self.base1.created_at, self.base2.created_at)
+        base3 = BaseModel(**self.base2.to_dict())
+        self.assertFalse(self.base2 is base3)
+        self.assertNotEqual(self.base2, base3)
+        self.assertEqual(self.base2.id, base3.id)
+        self.assertEqual(self.base2.created_at, base3.created_at)
+        self.assertEqual(self.base2.updated_at, base3.updated_at)
 
     def test_str(self):
         """Test __str__ method"""

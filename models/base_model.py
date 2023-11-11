@@ -12,11 +12,18 @@ class BaseModel:
         created_at (datetime: public instance attribute)
         updated_at (datetime: public instance attribute)
     """
-    def __init__(self):
-        self.id = str(uuid.uuid4())
-        current_time = datetime.datetime.now()
-        self.created_at = current_time
-        self.updated_at = current_time
+    def __init__(self, *args, **kwargs):
+        if kwargs is not None and len(kwargs) > 0:
+            for (key, value) in kwargs.items():
+                if key in ('created_at', 'updated_at'):
+                    setattr(self, key, datetime.datetime.fromisoformat(value))
+                elif key != '__class__':
+                    setattr(self, key, value)
+        else:
+            self.id = str(uuid.uuid4())
+            current_time = datetime.datetime.now()
+            self.created_at = current_time
+            self.updated_at = current_time
 
     def __str__(self):
         """Returns informal string representation of class instance"""
