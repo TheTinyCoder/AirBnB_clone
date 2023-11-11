@@ -27,12 +27,15 @@ class FileStorage:
         """
         if obj is not None:
             key = f"{obj.to_dict()['__class__']}.{obj.id}"
-            FileStorage.__objects[key] = obj.to_dict()
+            FileStorage.__objects[key] = obj
 
     def save(self):
         """Serializes __objects to the JSON file (path: __file_path)"""
         with open(FileStorage.__file_path, mode='w') as f:
-            json.dump(FileStorage.__objects, f)
+            objects = {}
+            for (k, v) in FileStorage.__objects.items():
+                objects[k] = v.to_dict()
+            json.dump(objects, f)
 
     def reload(self):
         """
@@ -42,6 +45,9 @@ class FileStorage:
         """
         try:
             with open(FileStorage.__file_path, mode='r') as f:
-                FileStorage.__objetcs = json.load(f)
+                FileStorage.__objects = {}
+                for (k, v) in json.load(f).items():
+                    cls = eval(v["__class__"])
+                    FileStorage.__objects[k] = cls(**v)
         except Exception:
             pass
