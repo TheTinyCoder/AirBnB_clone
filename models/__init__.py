@@ -6,9 +6,11 @@ from models.user import User
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
+from models.review import Review
 
 
 classes = {"BaseModel": BaseModel, "FileStorage": FileStorage, "User": User,
-           "State": State, "City": City, "Amenity": Amenity}
+           "State": State, "City": City, "Amenity": Amenity,
+           "Review": Review}
 storage = FileStorage()
 storage.reload()
