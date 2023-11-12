@@ -29,7 +29,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         try:
-            model = models.classes[line]()
+            cls = models.classes[line]
+            model = cls()
             model.save()
             print(model.id)
         except:
@@ -44,13 +45,13 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         args = line.split(' ')
-        if len(args) == 1:
-            print("** instance id missing **")
-            return
         if args[0] not in list(models.classes.keys()):
             print("** class doesn't exist **")
             return
-        models.storage.reload()
+        if len(args) == 1:
+            print("** instance id missing **")
+            return
+                models.storage.reload()
         try:
             print(models.storage.all()[".".join(args)])
         except:
