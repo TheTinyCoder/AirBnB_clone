@@ -22,7 +22,7 @@ class TestFileStorage(unittest.TestCase):
         model = BaseModel()
         key = f"{model.__class__.__name__}.{model.id}"
         self.assertTrue(isinstance(self.storage.all(), dict))
-'''
+
     def test_new(self):
         """Test new method"""
         base_dict = {"__class__": "BaseModel",
@@ -34,7 +34,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertFalse(key in self.storage._FileStorage__objects)
         self.storage.new(model)
         self.assertTrue(key in self.storage._FileStorage__objects)
-
+'''
     def test_save(self):
         """Test save method"""
         self.assertFalse(os.path.exists(FileStorage._FileStorage__file_path))
