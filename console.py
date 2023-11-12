@@ -28,13 +28,12 @@ class HBNBCommand(cmd.Cmd):
         if not line:
             print("** class name missing **")
             return
-        args = line.split()
-        if args[0] not in list(models.classes.keys()):
-            print("** class doesn't exist **")
-        else:
-            model = models.classes[args[0]]()
+        try:
+            model = models.classes[line]()
             model.save()
             print(model.id)
+        except:
+            print("** class doesn't exist **")
 
     def do_show(self, line):
         """
@@ -45,14 +44,17 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         args = line.split(' ')
+        if len(args) == 1:
+            print("** instance id missing **")
+            return
         if args[0] not in list(models.classes.keys()):
             print("** class doesn't exist **")
-        elif len(args) == 1:
-            print("** instance id missing **")
-        elif ".".join(args) not in models.storage.all():
-            print("** no instance found **")
-        else:
+            return
+        models.storage.reload()
+        try:
             print(models.storage.all()[".".join(args)])
+        except:
+            print("** no instance found **")
 
     def do_destroy(self, line):
         """
