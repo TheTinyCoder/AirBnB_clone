@@ -40,14 +40,13 @@ class TestFileStorage(unittest.TestCase):
         self.assertFalse(os.path.exists(FileStorage._FileStorage__file_path))
         self.storage.save()
         self.assertTrue(os.path.exists(FileStorage._FileStorage__file_path))
-'''
+
     def test_reload(self):
         """Test reload method"""
         expected = len(FileStorage._FileStorage__objects)
-        # self.storage.save()
         self.assertIsNone(self.storage.reload())
         self.assertEqual(expected, len(FileStorage._FileStorage__objects))
-'''
+
     def tearDown(self):
         """Tear down: executed before and after each test"""
         try:
