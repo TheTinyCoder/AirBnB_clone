@@ -63,29 +63,29 @@ class HBNBCommand(cmd.Cmd):
         """
         if not line:
             print("** class name missing **")
+            return
+        args = line.split(' ')
+        if args[0] not in models.classes:
+            print("** class doesn't exist **")
+        elif len(args) == 1:
+            print("** instance id missing **")
+        elif ".".join(args) not in models.storage.all():
+            print("** no instance found **")
         else:
-            args = line.split(' ')
-            if args[0] not in models.classes:
-                print("** class doesn't exist **")
-            elif len(args) == 1:
-                print("** instance id missing **")
-            elif ".".join(args) not in models.storage.all():
-                print("** no instance found **")
-            else:
-                models.storage.all().pop(".".join(args))
-                models.storage.save()
+            models.storage.all().pop(".".join(args))
+            models.storage.save()
 
     def do_all(self, line):
         args = line.split(' ')
-        if len(args) == 1:
+        if len(args) == 0:
             for v in models.storage.all().values():
                 print(v)
         else:
-            if args[1] not in list(models.classes.keys()):
+            if args[0] not in models.classes:
                 print("** class doesn't exist **")
             else:
                 for (k, v) in models.storage.all().items():
-                    if args[1] in k:
+                    if args[0] in k:
                         print(v)
 
     def do_update(self, line):
