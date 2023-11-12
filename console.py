@@ -6,7 +6,7 @@ import models
 
 class HBNBCommand(cmd.Cmd):
     """Implements functions from cmd"""
-    prompt = ("(hbnb)")
+    prompt = ("(hbnb) ")
 
     def do_quit(self, line):
         """Exits the program on quit"""
@@ -29,8 +29,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         try:
-            cls = models.classes[line]
-            model = cls()
+            model = models.classes[line]()
             model.save()
             print(model.id)
         except:
@@ -51,7 +50,7 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 1:
             print("** instance id missing **")
             return
-                models.storage.reload()
+        models.storage.reload()
         try:
             print(models.storage.all()[".".join(args)])
         except:
