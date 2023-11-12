@@ -34,13 +34,13 @@ class TestFileStorage(unittest.TestCase):
         self.assertFalse(key in self.storage._FileStorage__objects)
         self.storage.new(model)
         self.assertTrue(key in self.storage._FileStorage__objects)
-"""
+
     def test_save(self):
-        """Test save method"""
+        ""Test save method""
         self.assertFalse(os.path.exists(FileStorage._FileStorage__file_path))
         self.storage.save()
         self.assertTrue(os.path.exists(FileStorage._FileStorage__file_path))
-
+"""
     def test_reload(self):
         """Test reload method"""
         expected = len(FileStorage._FileStorage__objects)
