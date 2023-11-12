@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""User Module"""
+"""Review Module"""
 import models
 import uuid
 from datetime import datetime
@@ -8,7 +8,7 @@ from models.base_model import BaseModel
 
 class Review(BaseModel):
     """
-    User Class
+    Review Class
     Attributes:
         place_id (string:  public class attribute)
         user_id (string: public class attribute)
@@ -16,4 +16,4 @@ class Review(BaseModel):
     """
     place_id = ""
     user_id = ""
-    text = "" 
+    text = ""
