@@ -3,10 +3,10 @@
 BaseModel Test Module
 """
 import io
-import datetime
 import json
 import sys
 import unittest
+from datetime import datetime
 from models.base_model import BaseModel
 
 
@@ -17,13 +17,20 @@ class TestBaseModel(unittest.TestCase):
         self.base1 = BaseModel()
         self.base2 = BaseModel()
 
+    @classmethod
+    def tearDownClass(self):
+        """Tear down class"""
+        del self.base1
+        del self.base2
+
     def test_instance(self):
         """Test that instance of base is initialized correctly"""
         self.assertTrue(isinstance(self.base1, BaseModel))
         self.assertTrue(isinstance(self.base2, BaseModel))
         self.assertFalse(self.base1 is self.base2)
         self.assertNotEqual(self.base1, self.base2)
-        self.assertTrue(self.base1.id is not None)
+        self.assertTrue(
+            self.base1.id is not None and isinstance(self.base1.id, str))
         self.assertEqual(self.base1.created_at, self.base1.updated_at)
         self.assertNotEqual(self.base1.id, self.base2.id)
         self.assertNotEqual(self.base1.created_at, self.base2.created_at)
@@ -56,12 +63,10 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(
             base1_dict["__class__"], self.base1.__class__.__name__)
         try:
-            datetime.datetime.strptime(
-                base1_dict["created_at"], "%Y-%m-%dT%H:%M:%S.%f")
+            datetime.strptime(base1_dict["created_at"], "%Y-%m-%dT%H:%M:%S.%f")
         except ValueError:
             self.fail("created_at was not in ISO format")
         try:
-            datetime.datetime.strptime(
-                base1_dict["updated_at"], "%Y-%m-%dT%H:%M:%S.%f")
+            datetime.strptime(base1_dict["updated_at"], "%Y-%m-%dT%H:%M:%S.%f")
         except ValueError:
             self.fail("updated_at was not in ISO format")

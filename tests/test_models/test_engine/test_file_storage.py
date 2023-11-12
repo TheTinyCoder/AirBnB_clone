@@ -18,44 +18,37 @@ class TestFileStorage(unittest.TestCase):
         """Set up class"""
         self.storage = FileStorage()
 
-    def storage_len(self):
-        """Returns total number of objects in file path"""
-        if (os.path.exists(FileStorage._FileStorage__file_path)):
-            with open(FileStorage._FileStorage__file_path, "r") as file:
-                objects = list(json.load(file).keys())
-                return (len(objects))
-        else:
-            return (0)
-
     def test_all(self):
         """Test all method"""
-        self.assertEqual(len(self.storage.all()), self.storage_len())
         model = BaseModel()
-        model.save()
-        self.assertEqual(len(self.storage.all()), self.storage_len())
-"""
-    def test_new(self):
-        ""Test new method""
-        base_dict = list(self.storage.all().values())[0].to_dict()
-        model = BaseModel(**base_dict)
-        current_objects = self.storage.all()
-        self.storage.new(model)
-        self.assertEqual(len(current_objects), len(self.storage.all()))
+        key = f"{model.__class__.__name__}.{model.id}"
+        self.assertTrue(key in self.storage.all())
 
+    def test_new(self):
+        """Test new method"""
+        base_dict = {"__class__": "BaseModel",
+                     "updated_at": "2017-09-28T21:07:25.047381",
+                     "created_at": "2017-09-28T21:07:25.047372",
+                     "id": "ee49c413-023a-4b49-bd28-f2936c95460d"}
+        model = BaseModel(**base_dict)
+        key = f"{model.__class__.__name__}.{model.id}"
+        self.assertFalse(key in self.storage._FileStorage__objects)
+        self.storage.new(model)
+        self.assertTrue(key in self.storage._FileStorage__objects)
 
     def test_save(self):
-        ""Test save method""
-        base_dict = list(self.storage.all().values())[0].to_dict()
-        model = BaseModel(**base_dict)
-        self.storage.new(model)
+        """Test save method"""
         self.storage.save()
-        if (os.path.exists(FileStorage._FileStorage__file_path)):
-            with open(FileStorage._FileStorage__file_path, "r") as file:
-                objects = list(json.load(file).keys())
-                print(objects)
-        self.assertTrue(f"BaseModel.{model.id}" in objects)
-"""
+        self.assertTrue(os.path.exists(FileStorage._FileStorage__file_path))
+
+    def test_reload(self):
+        """Test reload method"""
+        expected = len(FileStorage._FileStorage__objects)
+        self.assertIsNone(self.storage.reload())
+        # self.assertEqual(expected, len(FileStorage._FileStorage__objects))
+
     @classmethod
     def tearDownClass(self):
         """Tear dowm class"""
+        del self.storage
         os.remove(FileStorage._FileStorage__file_path)

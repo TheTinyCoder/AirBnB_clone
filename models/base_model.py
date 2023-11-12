@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Base Model Module"""
 import uuid
-import datetime
+from datetime import datetime
 from models import storage
 
 
@@ -17,12 +17,13 @@ class BaseModel:
         if kwargs is not None and len(kwargs) > 0:
             for (key, value) in kwargs.items():
                 if key in ('created_at', 'updated_at'):
-                    setattr(self, key, datetime.datetime.fromisoformat(value))
+                    setattr(self, key,
+                            datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"))
                 elif key != '__class__':
                     setattr(self, key, value)
         else:
             self.id = str(uuid.uuid4())
-            current_time = datetime.datetime.now()
+            current_time = datetime.now()
             self.created_at = current_time
             self.updated_at = current_time
             storage.new(self)
@@ -36,7 +37,7 @@ class BaseModel:
         Updates the public instance attribute updated_at
         with the current datetime
         """
-        self.updated_at = datetime.datetime.now()
+        self.updated_at = datetime.now()
         storage.save()
 
     def to_dict(self):
