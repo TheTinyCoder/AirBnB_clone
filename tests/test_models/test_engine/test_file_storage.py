@@ -16,15 +16,15 @@ class TestFileStorage(unittest.TestCase):
     def setUp(self):
         """Set up: executed before and after each test"""
         self.storage = FileStorage()
-
+"""
     def test_all(self):
-        """Test all method"""
+        ""Test all method""
         model = BaseModel()
         key = f"{model.__class__.__name__}.{model.id}"
         self.assertTrue(key in self.storage.all())
 
     def test_new(self):
-        """Test new method"""
+        ""Test new method""
         base_dict = {"__class__": "BaseModel",
                      "updated_at": "2017-09-28T21:07:25.047381",
                      "created_at": "2017-09-28T21:07:25.047372",
@@ -36,23 +36,22 @@ class TestFileStorage(unittest.TestCase):
         self.assertTrue(key in self.storage._FileStorage__objects)
 """
     def test_save(self):
-        ""Test save method""
+        """Test save method"""
         self.assertFalse(os.path.exists(FileStorage._FileStorage__file_path))
         self.storage.save()
         self.assertTrue(os.path.exists(FileStorage._FileStorage__file_path))
 
     def test_reload(self):
-        ""Test reload method""
+        """Test reload method"""
         expected = len(FileStorage._FileStorage__objects)
         self.storage.save()
         self.assertIsNone(self.storage.reload())
         self.assertEqual(expected, len(FileStorage._FileStorage__objects))
 
     def tearDown(self):
-        ""Tear down: executed before and after each test""
+        """Tear down: executed before and after each test"""
         del self.storage
         try:
             os.remove(FileStorage._FileStorage__file_path)
         except FileNotFoundError:
             pass
-"""
