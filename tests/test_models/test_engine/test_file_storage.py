@@ -13,7 +13,8 @@ from models.base_model import BaseModel
 
 
 class TestFileStorage(unittest.TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpClass(self):
         """Set up: executed before and after each test"""
         self.storage = FileStorage()
 
@@ -48,7 +49,8 @@ class TestFileStorage(unittest.TestCase):
         self.assertIsNone(self.storage.reload())
         self.assertEqual(expected, len(FileStorage._FileStorage__objects))
 
-    def tearDown(self):
+    @classmethod
+    def tearDownClass(self):
         """Tear down: executed before and after each test"""
         del self.storage
         try:
