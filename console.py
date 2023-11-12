@@ -27,10 +27,12 @@ class HBNBCommand(cmd.Cmd):
         """
         if not line:
             print("** class name missing **")
-        elif line not in list(models.classes.keys()):
+            return
+        args = line.split()
+        if args[0] not in list(models.classes.keys()):
             print("** class doesn't exist **")
         else:
-            model = models.classes[line]()
+            model = models.classes[args[0]]()
             model.save()
             print(model.id)
 
