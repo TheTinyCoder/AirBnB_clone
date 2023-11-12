@@ -16,13 +16,13 @@ class TestFileStorage(unittest.TestCase):
     def setUp(self):
         """Set up: executed before and after each test"""
         self.storage = FileStorage()
-'''
+
     def test_all(self):
         """Test all method"""
         model = BaseModel()
         key = f"{model.__class__.__name__}.{model.id}"
         self.assertTrue(isinstance(self.storage.all(), dict))
-
+'''
     def test_new(self):
         """Test new method"""
         base_dict = {"__class__": "BaseModel",
