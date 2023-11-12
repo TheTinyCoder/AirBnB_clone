@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """File Storage Module"""
 import json
+import models
 
 
 class FileStorage:
@@ -47,7 +48,7 @@ class FileStorage:
             with open(FileStorage.__file_path, mode='r') as f:
                 FileStorage.__objects = {}
                 for (k, v) in json.load(f).items():
-                    cls = eval(v["__class__"])
+                    cls = models.classes[v["__class__"]]
                     FileStorage.__objects[k] = cls(**v)
         except Exception:
             pass
