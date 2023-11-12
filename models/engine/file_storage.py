@@ -13,8 +13,8 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
-    def __init__(self):
-        self.reload()
+    # def __init__(self):
+    # self.reload()
 
     def all(self):
         """
