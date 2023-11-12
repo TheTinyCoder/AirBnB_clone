@@ -25,7 +25,7 @@ class HBNBCommand(cmd.Cmd):
         Creates a new instance of BaseModel
         saves to JSON file and prints to console
         """
-        if len(line) == 0:
+        if not line:
             print("** class name missing **")
         elif line not in list(models.classes.keys()):
             print("** class doesn't exist **")
@@ -39,7 +39,7 @@ class HBNBCommand(cmd.Cmd):
         Prints the string representation of an instance
         based on the class name and id
         """
-        if len(line) == 0:
+        if not line:
             print("** class name missing **")
             return
         args = line.split(' ')
@@ -47,7 +47,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         elif len(args) == 1:
             print("** instance id missing **")
-        elif ".".join(args) not in list(models.storage.all().keys()):
+        elif ".".join(args) not in models.storage.all():
             print("** no instance found **")
         else:
             print(models.storage.all()[".".join(args)])
@@ -57,7 +57,7 @@ class HBNBCommand(cmd.Cmd):
         Deletes an instance based on the class name and id
         (save the change into the JSON file)
         """
-        if len(line) == 0:
+        if not line:
             print("** class name missing **")
             return
         args = line.split(' ')
@@ -65,7 +65,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         elif len(args) == 1:
             print("** instance id missing **")
-        elif ".".join(args) not in list(models.storage.all().keys()):
+        elif ".".join(args) not in models.storage.all():
             print("** no instance found **")
         else:
             models.storage.all().pop(".".join(args))
@@ -85,7 +85,7 @@ class HBNBCommand(cmd.Cmd):
                         print(v)
 
     def do_update(self, line):
-        if len(line) == 0:
+        if not line:
             print("** class name missing **")
             return
         args = line.split(' ')
