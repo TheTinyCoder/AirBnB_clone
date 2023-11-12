@@ -75,11 +75,11 @@ class HBNBCommand(cmd.Cmd):
             models.storage.save()
 
     def do_all(self, line):
-        args = line.split(' ')
-        if len(args) == 0:
-            for v in models.storage.all().values():
+        if not line:
+            for v in list(models.storage.all().values()):
                 print(v)
         else:
+            args = line.split(' ')
             if args[0] not in models.classes:
                 print("** class doesn't exist **")
             else:
@@ -103,7 +103,9 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) <= 3:
             print("** value missing **")
         else:
-            models.storage.all()[".".join(args[:2])][args[2]] = args[3]
+            setattr(
+                models.storage.all()[".".join(args[:2])], args[2], args[3])
+            models.storage.save()
 
 
 if __name__ == '__main__':
