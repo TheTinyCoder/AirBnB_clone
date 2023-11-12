@@ -16,7 +16,6 @@ class TestFileStorage(unittest.TestCase):
     def setUp(self):
         """Set up: executed before and after each test"""
         self.storage = FileStorage()
-        self.model = BaseModel()
 
     def test_all(self):
         """Test all method"""
