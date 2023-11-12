@@ -63,17 +63,17 @@ class HBNBCommand(cmd.Cmd):
         """
         if not line:
             print("** class name missing **")
-            return
-        args = line.split(' ')
-        if args[0] not in models.classes:
-            print("** class doesn't exist **")
-        elif len(args) == 1:
-            print("** instance id missing **")
-        elif ".".join(args) not in models.storage.all():
-            print("** no instance found **")
         else:
-            models.storage.all().pop(".".join(args))
-            models.storage.save()
+            args = line.split(' ')
+            if args[0] not in models.classes:
+                print("** class doesn't exist **")
+            elif len(args) == 1:
+                print("** instance id missing **")
+            elif ".".join(args) not in models.storage.all():
+                print("** no instance found **")
+            else:
+                models.storage.all().pop(".".join(args))
+                models.storage.save()
 
     def do_all(self, line):
         args = line.split(' ')
