@@ -100,7 +100,7 @@ class HBNBCommand(cmd.Cmd):
         elif ".".join(args[:2]) not in models.storage.all():
             print("** no instance found **")
         elif len(args) == 2:
-            print("** attribute name id missing **")
+            print("** attribute name missing **")
         elif len(args) == 3:
             print("** value missing **")
         else:
