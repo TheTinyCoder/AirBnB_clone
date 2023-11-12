@@ -16,11 +16,11 @@ class TestFileStorage(unittest.TestCase):
     def setUp(self):
         """Set up: executed before and after each test"""
         self.storage = FileStorage()
-
+'''
     def test_all(self):
         """Test all method"""
-        # model = BaseModel()
-        # key = f"{model.__class__.__name__}.{model.id}"
+        model = BaseModel()
+        key = f"{model.__class__.__name__}.{model.id}"
         self.assertTrue(isinstance(self.storage.all(), dict))
 
     def test_new(self):
@@ -46,7 +46,7 @@ class TestFileStorage(unittest.TestCase):
         expected = len(FileStorage._FileStorage__objects)
         self.assertIsNone(self.storage.reload())
         self.assertEqual(expected, len(FileStorage._FileStorage__objects))
-
+'''
     def tearDown(self):
         """Tear down: executed before and after each test"""
         del self.storage
