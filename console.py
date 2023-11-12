@@ -45,12 +45,12 @@ class HBNBCommand(cmd.Cmd):
         args = line.split(' ')
         if args[0] not in list(models.classes.keys()):
             print("** class doesn't exist **")
-        elif args[1] is None:
+        elif len(args) == 1:
             print("** instance id missing **")
         elif ".".join(args) not in models.storage.all():
             print("** no instance found **")
         else:
-            print(self.storage.all()[".".join(args)])
+            print(models.storage.all()[".".join(args)])
 
     def do_destroy(self, line):
         """
@@ -63,24 +63,24 @@ class HBNBCommand(cmd.Cmd):
         args = line.split(' ')
         if args[0] not in list(models.classes.keys()):
             print("** class doesn't exist **")
-        elif args[1] is None:
+        elif len(args) == 1:
             print("** instance id missing **")
         elif ".".join(args) not in models.storage.all():
             print("** no instance found **")
         else:
-            self.storage.all().pop(".".join(args))
-            self.storage.save()
+            models.storage.all().pop(".".join(args))
+            models.storage.save()
 
     def do_all(self, line):
         args = line.split(' ')
         if len(args) == 1:
-            for v in self.storage.all().values():
+            for v in models.storage.all().values():
                 print(v)
         else:
             if args[1] not in list(models.classes.keys()):
                 print("** class doesn't exist **")
             else:
-                for (k, v) in self.storage.all().items():
+                for (k, v) in models.storage.all().items():
                     if args[1] in k:
                         print(v)
 
@@ -91,16 +91,16 @@ class HBNBCommand(cmd.Cmd):
         args = line.split(' ')
         if args[0] not in list(models.classes.keys()):
             print("** class doesn't exist **")
-        elif args[1] is None:
+        elif len(args) == 1:
             print("** instance id missing **")
         elif ".".join(args[:2]) not in models.storage.all():
             print("** no instance found **")
-        elif args[2] is None:
+        elif len(args) == 2:
             print("** attribute name id missing **")
-        elif args[3] is None:
+        elif len(args) == 3:
             print("** value missing **")
         else:
-            self.storage.all()[".".join(args[:2])][args[2]] = args[3]
+            models.storage.all()[".".join(args[:2])][args[2]] = args[3]
 
 
 if __name__ == '__main__':
