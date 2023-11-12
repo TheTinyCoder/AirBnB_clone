@@ -19,7 +19,8 @@ class TestFileStorage(unittest.TestCase):
 
     def test_all(self):
         """Test all method"""
-        key = f"{self.model.__class__.__name__}.{self.model.id}"
+        model = BaseModel()
+        key = f"{model.__class__.__name__}.{model.id}"
         self.assertTrue(isinstance(self.storage.all(), dict))
 
     def test_new(self):
@@ -33,7 +34,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertFalse(key in self.storage._FileStorage__objects)
         self.storage.new(model)
         self.assertTrue(key in self.storage._FileStorage__objects)
-'''
+
     def test_save(self):
         """Test save method"""
         self.assertFalse(os.path.exists(FileStorage._FileStorage__file_path))
@@ -45,7 +46,7 @@ class TestFileStorage(unittest.TestCase):
         expected = len(FileStorage._FileStorage__objects)
         self.assertIsNone(self.storage.reload())
         self.assertEqual(expected, len(FileStorage._FileStorage__objects))
-'''
+
     def tearDown(self):
         """Tear down: executed before and after each test"""
         del self.storage
