@@ -50,7 +50,6 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 1:
             print("** instance id missing **")
             return
-        models.storage.reload()
         try:
             print(models.storage.all()[".".join(args)])
         except Exception:
@@ -95,13 +94,13 @@ class HBNBCommand(cmd.Cmd):
         args = line.split(' ')
         if args[0] not in list(models.classes.keys()):
             print("** class doesn't exist **")
-        elif len(args) == 1:
+        elif len(args) <= 1:
             print("** instance id missing **")
         elif ".".join(args[:2]) not in models.storage.all():
             print("** no instance found **")
-        elif len(args) == 2:
+        elif len(args) <= 2:
             print("** attribute name missing **")
-        elif len(args) == 3:
+        elif len(args) <= 3:
             print("** value missing **")
         else:
             models.storage.all()[".".join(args[:2])][args[2]] = args[3]
