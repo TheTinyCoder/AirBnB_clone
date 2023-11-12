@@ -50,5 +50,4 @@ class TestFileStorage(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         """Tear dowm class"""
-        del self.storage
         os.remove(FileStorage._FileStorage__file_path)
