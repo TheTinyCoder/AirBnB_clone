@@ -37,7 +37,7 @@ class TestFileStorage(unittest.TestCase):
 
     def test_save(self):
         """Test save method"""
-        self.assertTrue(os.path.exists(FileStorage._FileStorage__file_path))
+        self.assertFalse(os.path.exists(FileStorage._FileStorage__file_path))
         self.storage.save()
         self.assertTrue(os.path.exists(FileStorage._FileStorage__file_path))
 
