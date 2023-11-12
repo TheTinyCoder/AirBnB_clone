@@ -49,6 +49,7 @@ class TestFileStorage(unittest.TestCase):
 
     def tearDown(self):
         """Tear down: executed before and after each test"""
+        del self.storage
         try:
             os.remove(FileStorage._FileStorage__file_path)
         except FileNotFoundError:
