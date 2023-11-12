@@ -13,8 +13,9 @@ from models.base_model import BaseModel
 
 
 class TestFileStorage(unittest.TestCase):
-    def setUp(self):
-        """Set up: executed before and after each test"""
+    @classmethod
+    def setUpClass(self):
+        """Set up class"""
         self.storage = FileStorage()
 
     def test_all(self):
@@ -35,6 +36,12 @@ class TestFileStorage(unittest.TestCase):
         self.storage.new(model)
         self.assertTrue(key in self.storage._FileStorage__objects)
 
+    def test_save(self):
+        """Test save method"""
+        self.assertFalse(os.path.exists(FileStorage._FileStorage__file_path))
+        self.storage.save()
+        self.assertTrue(os.path.exists(FileStorage._FileStorage__file_path))
+
     def test_reload(self):
         """Test reload method"""
         expected = len(FileStorage._FileStorage__objects)
@@ -42,8 +49,9 @@ class TestFileStorage(unittest.TestCase):
         self.assertIsNone(self.storage.reload())
         self.assertEqual(expected, len(FileStorage._FileStorage__objects))
 
-    def tearDown(self):
-        """Tear down: executed before and after each test"""
+    @classmethod
+    def tearDownClass(self):
+        """Tear down class"""
         del self.storage
         try:
             os.remove(FileStorage._FileStorage__file_path)
