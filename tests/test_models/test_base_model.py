@@ -63,7 +63,8 @@ class TestBaseModel(unittest.TestCase):
             self.assertEqual(
                 datetime.now(), datetime(2023, 11, 13, 21, 7, 51, 973301))
             # check that save() updates updated_at to mocked date
-            expected_time,_ = datetime.now(), self.base2.save()
+            expected_time = datetime.now()
+            self.base2.save()
         self.assertEqual(expected_time, self.base2.updated_at)
         # check that datetime.now is no longer equal to mocked date
         self.assertNotEqual(

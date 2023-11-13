@@ -15,6 +15,7 @@ from models.base_model import BaseModel
 class TestFileStorage(unittest.TestCase):
     def setUp(self):
         """Set up: run before and after each method"""
+        FileStorage._FileStorage__objects = {}
         self.storage = FileStorage()
         self.my_model = BaseModel()
 
@@ -33,7 +34,7 @@ class TestFileStorage(unittest.TestCase):
                      "id": "ee49c413-023a-4b49-bd28-f2936c95460d"}
         model = BaseModel(**base_dict)
         key = f"{model.__class__.__name__}.{model.id}"
-        # self.assertFalse(key in self.storage._FileStorage__objects)
+        self.assertFalse(key in self.storage._FileStorage__objects)
         self.storage.new(model)
         self.assertTrue(key in self.storage._FileStorage__objects)
 
