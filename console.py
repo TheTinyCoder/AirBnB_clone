@@ -3,6 +3,7 @@
 import cmd
 import json
 import models
+import shlex
 
 
 class HBNBCommand(cmd.Cmd):
@@ -88,38 +89,45 @@ class HBNBCommand(cmd.Cmd):
                     if args[0] in k:
                         print(v)
 
-    def do_update(self, line):
-        if not line:
+    def do_update(self, args):
+        '''
+            Update an instance based on the class name and id
+            sent as args.
+        '''
+        storage = FileStorage()
+        storage.reload()
+        args = shlex.split(args)
+        if len(args) == 0:
             print("** class name missing **")
             return
-        if '{' in line and '}' in line:
-            args, a_dict = line.split('{'), {}
-        else:
-            args, a_dict = line.split(' '), None
-        if a_dict is not None:
-            a_dict, args1 = json.loads("{" + args[1]), args[0].split(' ')
-            print(args1)
-        else:
-            args1 = args
-        if args1[0] not in list(models.classes.keys()):
-            print("** class doesn't exist **")
-        elif len(args1) <= 1:
+        elif len(args) == 1:
             print("** instance id missing **")
-        elif ".".join(args1[:2]) not in models.storage.all():
-            print("** no instance found **")
-        elif len(args1) <= 2 and a_dict is None:
+            return
+        elif len(args) == 2:
             print("** attribute name missing **")
-        elif len(args1) <= 3 and a_dict is None:
+            return
+        elif len(args) == 3:
             print("** value missing **")
-        elif len(args1) == 3 and len(a_dict) > 0:
-            for (k, v) in a_dict.items():
-                setattr(
-                    models.storage.all()[".".join(args1[:2])], k, v)
-            models.storage.save()
-        else:
-            setattr(
-                models.storage.all()[".".join(args1[:2])], args1[2], args1[3])
-            models.storage.save()
+            return
+        try:
+            eval(args[0])
+        except NameError:
+            print("** class doesn't exist **")
+            return
+        key = args[0] + "." + args[1]
+        obj_dict = storage.all()
+        try:
+            obj_value = obj_dict[key]
+        except KeyError:
+            print("** no instance found **")
+            return
+        try:
+            attr_type = type(getattr(obj_value, args[2]))
+            args[3] = attr_type(args[3])
+        except AttributeError:
+            pass
+        setattr(obj_value, args[2], args[3])
+        obj_value.save()
 
     def do_count(self, line):
         """Retrieve the number of instances of a class"""
