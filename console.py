@@ -107,9 +107,22 @@ class HBNBCommand(cmd.Cmd):
                 models.storage.all()[".".join(args[:2])], args[2], args[3])
             models.storage.save()
 
+    def do_count(self, line):
+        """Retrieve the number of instances of a class"""
+        args = line.split(' ')
+        if args[0] not in models.classes:
+            print("** class doesn't exist **")
+        else:
+            count = 0
+            for (k, v) in models.storage.all().items():
+                if args[0] in k:
+                    count += 1
+            print(count)
+
     def default(self, line):
         methods = {"all": self.do_all, "show": self.do_show,
-                   "destroy": self.do_destroy, "update": self.do_update}
+                   "destroy": self.do_destroy, "update": self.do_update,
+                   "count": self.do_count}
         args = line.split('.')
         model = args[0]
         args1 = args[1].split('(')
