@@ -89,38 +89,39 @@ class HBNBCommand(cmd.Cmd):
                     if args[0] in k:
                         print(v)
 
-    def do_update(self, arg):
-        """ Updates an instance based on the class name and id """
-
-        if not arg:
+    def do_update(self, line):
+        if not line:
             print("** class name missing **")
             return
-
-        a = ""
-        for argv in arg.split(','):
-            a = a + argv
-
-        args = shlex.split(a)
-
-        if args[0] not in HBNBCommand.l_classes:
-            print("** class doesn't exist **")
-        elif len(args) == 1:
-            print("** instance id missing **")
+        models.storage.reload()
+        if '{' in line and '}' in line:
+            args, a_dict = line.split('{'), {}
         else:
-            all_objs = storage.all()
-            for key, objc in all_objs.items():
-                ob_name = objc.__class__.__name__
-                ob_id = objc.id
-                if ob_name == args[0] and ob_id == args[1].strip('"'):
-                    if len(args) == 2:
-                        print("** attribute name missing **")
-                    elif len(args) == 3:
-                        print("** value missing **")
-                    else:
-                        setattr(objc, args[2], args[3])
-                        storage.save()
-                    return
+            args, a_dict = line.split(' '), None
+        if a_dict is not None:
+            a_dict, args1 = json.loads("{" + args[1]), args[0].split(' ')
+            print(args1)
+        else:
+            args1 = args
+        if args1[0] not in list(models.classes.keys()):
+            print("** class doesn't exist **")
+        elif len(args1) <= 1:
+            print("** instance id missing **")
+        elif ".".join(args1[:2]) not in models.storage.all():
             print("** no instance found **")
+        elif len(args1) <= 2 and a_dict is None:
+            print("** attribute name missing **")
+        elif len(args1) <= 3 and a_dict is None:
+            print("** value missing **")
+        elif len(args1) == 3 and len(a_dict) > 0:
+            for (k, v) in a_dict.items():
+                setattr(
+                    models.storage.all()[".".join(args1[:2])], k, v)
+            models.storage.save()
+        else:
+            setattr(
+                models.storage.all()[".".join(args1[:2])], args1[2], args1[3])
+            models.storage.save()
 
     def do_count(self, line):
         """Retrieve the number of instances of a class"""
