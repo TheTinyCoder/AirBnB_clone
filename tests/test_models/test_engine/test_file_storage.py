@@ -16,6 +16,7 @@ class TestFileStorage(unittest.TestCase):
     def setUp(self):
         """Set up: run before and after each method"""
         self.storage = FileStorage()
+        self.my_model = BaseModel()
 
     def test_all(self):
         """Test all method"""
@@ -40,6 +41,22 @@ class TestFileStorage(unittest.TestCase):
         self.assertFalse(os.path.exists(FileStorage._FileStorage__file_path))
         self.storage.save()
         self.assertTrue(os.path.exists(FileStorage._FileStorage__file_path))
+
+    def test_save_file_read(self):
+        """Testing the contents of the files inside the file.json"""
+        self.storage.save()
+        self.storage.new(self.my_model)
+        with open("file.json", encoding="UTF8") as fd:
+            content = json.load(fd)
+        self.assertTrue(type(content) is dict)
+
+    def test_the_type_file_content(self):
+        """Testing the type of the contents inside the file"""
+        self.storage.save()
+        self.storage.new(self.my_model)
+        with open("file.json", encoding="UTF8") as fd:
+            content = fd.read()
+        self.assertIsInstance(content, str)
 
     def test_reload(self):
         """Test reload method"""
