@@ -7,6 +7,7 @@ import json
 import sys
 import unittest
 from datetime import datetime
+from freezegun import freeze_time
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 
@@ -52,9 +53,22 @@ class TestBaseModel(unittest.TestCase):
 
     def test_save(self):
         """Test save method"""
-        current_updated_at = self.base2.updated_at
-        self.base2.save()
-        self.assertNotEqual(current_updated_at, self.base2.updated_at)
+        old_updated_at = self.base2.updated_at
+        # check that datetime.now is not equal to mock date
+        self.assertNotEqual(
+            datetime.now(), datetime(2023, 11, 13, 21, 7, 51, 973301))
+        with freeze_time("2023-11-13 21:07:51.973301"):
+            # freeze time to return specific datetime 
+            # when datetime.now is called
+            self.assertEqual(
+                datetime.now(), datetime(2023, 11, 13, 21, 7, 51, 973301))
+            # check that save() updates updated_at to mocked date
+            expected_time,_ = datetime.now(), self.base2.save()
+        self.assertEqual(expected_time, self.base2.updated_at)
+        # check that datetime.now is no longer equal to mocked date
+        self.assertNotEqual(
+                datetime.now(), datetime(2023, 11, 13, 21, 7, 51, 973301))
+        self.assertNotEqual(old_updated_at, self.base2.updated_at)
         key = f"{self.base2.__class__.__name__}.{self.base2.id}"
         expected = FileStorage._FileStorage__objects[key].updated_at
         self.assertEqual(expected, self.base2.updated_at)
