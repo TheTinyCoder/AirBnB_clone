@@ -113,7 +113,7 @@ class HBNBCommand(cmd.Cmd):
         elif len(args1) == 3 and len(a_dict) > 0:
             for (k, v) in a_dict.items():
                 setattr(models.storage.all()[".".join(args1[:2])], k, v)
-                models.storage.save()
+            models.storage.save()
         else:
             setattr(
                 models.storage.all()[".".join(args1[:2])], args1[2], args1[3])
