@@ -11,6 +11,6 @@ from models.review import Review
 
 classes = {"BaseModel": BaseModel, "FileStorage": FileStorage, "User": User,
            "State": State, "City": City, "Amenity": Amenity,
-           "Review": Review}
+           "Place": Place, "Review": Review}
 storage = FileStorage()
 storage.reload()
