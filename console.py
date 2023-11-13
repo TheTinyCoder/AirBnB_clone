@@ -92,13 +92,14 @@ class HBNBCommand(cmd.Cmd):
         if not line:
             print("** class name missing **")
             return
-        args = line.split('{')
-        a_dict = {}
-        if len(args) == 0:
-            args1 == line.split(' ')
+        if '{' in line and '}' in line:
+            args, a_dict = line.split('{'), {}
         else:
-            a_dict = json.loads("{" + args[1])
-            args1 = args[0].split(' ')
+            args, a_dict = line.split(' '), None
+        if a_dict is not None:
+            a_dict, args1 = json.loads("{" + args[1]), args[0].split(' ')
+        else:
+            args1 = args
         if args1[0] not in list(models.classes.keys()):
             print("** class doesn't exist **")
         elif len(args1) <= 1:
@@ -107,7 +108,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
         elif len(args1) <= 2:
             print("** attribute name missing **")
-        elif len(args1) <= 3 and len(a_dict) == 0:
+        elif len(args1) <= 3 and a_dict is None:
             print("** value missing **")
         elif len(args1) == 3 and len(a_dict) > 0:
             for (k, v) in a_dict.items():
