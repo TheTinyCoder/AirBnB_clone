@@ -98,6 +98,7 @@ class HBNBCommand(cmd.Cmd):
             args, a_dict = line.split(' '), None
         if a_dict is not None:
             a_dict, args1 = json.loads("{" + args[1]), args[0].split(' ')
+            print(args1)
         else:
             args1 = args
         if args1[0] not in list(models.classes.keys()):
@@ -106,13 +107,14 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
         elif ".".join(args1[:2]) not in models.storage.all():
             print("** no instance found **")
-        elif len(args1) <= 2:
+        elif len(args1) <= 2 and a_dict is None:
             print("** attribute name missing **")
         elif len(args1) <= 3 and a_dict is None:
             print("** value missing **")
         elif len(args1) == 3 and len(a_dict) > 0:
             for (k, v) in a_dict.items():
-                setattr(models.storage.all()[".".join(args1[:2])], k, v)
+                setattr(
+                    models.storage.all()[".".join(args1[:2])], k, v)
             models.storage.save()
         else:
             setattr(
