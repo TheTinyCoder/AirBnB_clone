@@ -107,6 +107,20 @@ class HBNBCommand(cmd.Cmd):
                 models.storage.all()[".".join(args[:2])], args[2], args[3])
             models.storage.save()
 
+    def default(self, line):
+        methods = {"all": self.do_all, "show": self.do_show,
+                   "destroy": self.do_destroy, "update": self.do_update}
+        args = line.split('.')
+        model = args[0]
+        args1 = args[1].split('(')
+        method = args1[0]
+        arguments = args1[1].replace(')', '')
+        if model in models.classes and method in methods:
+            if len(arguments) == 0:
+                methods[method](model)
+            else:
+                methods[method](model + " " + arguments)
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
