@@ -15,6 +15,7 @@ from models.base_model import BaseModel
 class TestFileStorage(unittest.TestCase):
     def setUp(self):
         """Set up: run before and after each method"""
+        FileStorage._FileStorage__objects = {}
         self.storage = FileStorage()
         self.my_model = BaseModel()
 
