@@ -21,6 +21,7 @@ class TestFileStorage(unittest.TestCase):
     def test_all(self):
         """Test all method"""
         model = BaseModel()
+        model.save()
         key = f"{model.__class__.__name__}.{model.id}"
         self.assertTrue(isinstance(self.storage.all(), dict))
 
