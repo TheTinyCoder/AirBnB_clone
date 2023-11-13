@@ -34,7 +34,8 @@ class TestPlace(unittest.TestCase):
         self.assertTrue(self.place1.name == "")
         self.assertTrue(self.place1.name == self.place1.description)
         self.assertTrue(self.place1.number_rooms == 0)
-        self.assertTrue(self.place1.number_rooms == self.place1.number_bathrooms)
+        self.assertTrue(
+            self.place1.number_rooms == self.place1.number_bathrooms)
         self.assertTrue(self.place1.max_guest == 0)
         self.assertTrue(self.place1.max_guest == self.place1.price_by_night)
         self.assertTrue(self.place1.latitude == 0.0)
@@ -74,10 +75,12 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(
             place1_dict["__class__"], self.place1.__class__.__name__)
         try:
-            datetime.strptime(place1_dict["created_at"], "%Y-%m-%dT%H:%M:%S.%f")
+            datetime.strptime(
+                place1_dict["created_at"], "%Y-%m-%dT%H:%M:%S.%f")
         except ValueError:
             self.fail("created_at was not in ISO format")
         try:
-            datetime.strptime(place1_dict["updated_at"], "%Y-%m-%dT%H:%M:%S.%f")
+            datetime.strptime(
+                place1_dict["updated_at"], "%Y-%m-%dT%H:%M:%S.%f")
         except ValueError:
             self.fail("updated_at was not in ISO format")
