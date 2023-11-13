@@ -114,7 +114,7 @@ class HBNBCommand(cmd.Cmd):
         model = args[0]
         args1 = args[1].split('(')
         method = args1[0]
-        arguments = args1[1].replace(')', '')
+        arguments = args1[1].replace(')', '').replace(',', '')
         if model in models.classes and method in methods:
             if len(arguments) == 0:
                 methods[method](model)
