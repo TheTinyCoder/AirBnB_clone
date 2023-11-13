@@ -56,9 +56,7 @@ class TestBaseModel(unittest.TestCase):
         self.base2.save()
         self.assertNotEqual(current_updated_at, self.base2.updated_at)
         key = f"{self.base2.__class__.__name__}.{self.base2.id}"
-        storage = FileStorage()
-        storage.reload()
-        expected = storage._FileStorage__objects[key].updated_at
+        expected = FileStorage._FileStorage__objects[key].updated_at
         self.assertEqual(expected, self.base2.updated_at)
 
     def test_to_dict(self):
