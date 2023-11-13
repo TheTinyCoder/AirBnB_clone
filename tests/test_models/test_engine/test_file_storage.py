@@ -47,6 +47,7 @@ class TestFileStorage(unittest.TestCase):
         """Test reload method"""
         expected = len(FileStorage._FileStorage__objects)
         self.storage.save()
+        FileStorage._FileStorage__objects = {}
         self.assertIsNone(self.storage.reload())
         self.assertEqual(expected, len(FileStorage._FileStorage__objects))
 
