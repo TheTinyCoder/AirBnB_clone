@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Command Interpreter Module"""
 import cmd
+import json
 import models
 
 
@@ -91,20 +92,30 @@ class HBNBCommand(cmd.Cmd):
         if not line:
             print("** class name missing **")
             return
-        args = line.split(' ')
-        if args[0] not in list(models.classes.keys()):
+        args = line.split('{')
+        a_dict = {}
+        if len(args) == 0:
+            args1 == line.split(' ')
+        else:
+            a_dict = json.loads("{" + args[1])
+            args1 = args[0].split(' ')
+        if args1[0] not in list(models.classes.keys()):
             print("** class doesn't exist **")
-        elif len(args) <= 1:
+        elif len(args1) <= 1:
             print("** instance id missing **")
-        elif ".".join(args[:2]) not in models.storage.all():
+        elif ".".join(args1[:2]) not in models.storage.all():
             print("** no instance found **")
-        elif len(args) <= 2:
+        elif len(args1) <= 2:
             print("** attribute name missing **")
-        elif len(args) <= 3:
+        elif len(args1) <= 3 and len(a_dict) == 0:
             print("** value missing **")
+        elif len(args1) == 3 and len(a_dict) > 0:
+            for (k, v) in a_dict.items():
+                setattr(models.storage.all()[".".join(args1[:2])], k, v)
+                models.storage.save()
         else:
             setattr(
-                models.storage.all()[".".join(args[:2])], args[2], args[3])
+                models.storage.all()[".".join(args1[:2])], args1[2], args1[3])
             models.storage.save()
 
     def do_count(self, line):
