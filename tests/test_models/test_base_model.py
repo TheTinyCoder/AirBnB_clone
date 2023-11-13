@@ -8,6 +8,7 @@ import sys
 import unittest
 from datetime import datetime
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
 
 
 class TestBaseModel(unittest.TestCase):
@@ -54,6 +55,11 @@ class TestBaseModel(unittest.TestCase):
         current_updated_at = self.base2.updated_at
         self.base2.save()
         self.assertNotEqual(current_updated_at, self.base2.updated_at)
+        key = f"{self.base2.__class__.__name__}.{self.base2.id}"
+        storage = FileStorage()
+        storage.reload()
+        expected = storage._FileStorage__objects[key].updated_at
+        self.assertEqual(expected, self.base2.updated_at)
 
     def test_to_dict(self):
         """Test to_dict method"""

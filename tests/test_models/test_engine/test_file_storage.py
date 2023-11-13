@@ -42,22 +42,6 @@ class TestFileStorage(unittest.TestCase):
         self.storage.save()
         self.assertTrue(os.path.exists(FileStorage._FileStorage__file_path))
 
-    def test_save_file_read(self):
-        """Testing the contents of the files inside the file.json"""
-        self.storage.save()
-        self.storage.new(self.my_model)
-        with open("file.json", encoding="UTF8") as fd:
-            content = json.load(fd)
-        self.assertTrue(type(content) is dict)
-
-    def test_the_type_file_content(self):
-        """Testing the type of the contents inside the file"""
-        self.storage.save()
-        self.storage.new(self.my_model)
-        with open("file.json", encoding="UTF8") as fd:
-            content = fd.read()
-        self.assertIsInstance(content, str)
-
     def test_reload(self):
         """Test reload method"""
         expected = len(FileStorage._FileStorage__objects)
@@ -67,8 +51,8 @@ class TestFileStorage(unittest.TestCase):
 
     def tearDown(self):
         """Tear down: run before and after each method"""
-        del self.storage
         try:
             os.remove(FileStorage._FileStorage__file_path)
         except FileNotFoundError:
             pass
+        del self.storage
