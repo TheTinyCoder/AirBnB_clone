@@ -77,6 +77,10 @@ class HBNBCommand(cmd.Cmd):
             models.storage.save()
 
     def do_all(self, line):
+        """
+        Prints all string representation of all instances
+        based or not on the class name
+        """
         if not line:
             for v in list(models.storage.all().values()):
                 print(v)
@@ -90,6 +94,10 @@ class HBNBCommand(cmd.Cmd):
                         print(v)
 
     def do_update(self, line):
+        """
+        Updates an instance based on the class name and id
+        by adding or updating attribute
+        """
         if not line:
             print("** class name missing **")
             return
@@ -118,7 +126,7 @@ class HBNBCommand(cmd.Cmd):
                     print("** attribute name missing **")
             else:
                 setattr(model, args[2], args[3])
-                models.storage.save()
+                model.save()
 
     def do_count(self, line):
         """Retrieve the number of instances of a class"""
