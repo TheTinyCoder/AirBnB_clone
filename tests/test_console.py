@@ -6,18 +6,20 @@ import sys
 import unittest
 from console import HBNBCommand
 from io import StringIO
+from models.engine.file_storage import FileStorage
 
 
 class TestConsole(unittest.TestCase):
     """Test the console"""
     def setUp(self):
-        """Set up"""
+        """Set up: run before each function"""
         self.backup = sys.__stdout__
         self.file = StringIO()
         sys.stdout = self.file
+        self.objects = FileStorage._FileStorage__objects
 
     def tearDown(self):
-        """Tear down"""
+        """Tear down: run after each function"""
         sys.stdout = self.backup
 
     def create(self):
@@ -34,19 +36,52 @@ class TestConsole(unittest.TestCase):
         console = self.create()
         self.assertTrue(console.onecmd("EOF"))
 
+    def test_help(self):
+        expected = ['\n', 'Documented commands (type help <topic>):',
+                    '\n', '========================================',
+                    '\n', 'EOF  all  count  create  destroy  help  ',
+                    'quit  show  update', '\n']
+        console = self.create()
+        console.onecmd('help')
+        self.assertEqual(self.file.getvalue()[:-1], "".join(expected))
+
     def test_empty_line(self):
         """Test that emptyline executes nothing"""
         console = self.create()
-        sys.stdout = file = StringIO()
         console.onecmd('\n')
-        sys.stdout = sys.__stdout__
-        self.assertTrue(len(file.getvalue()) == 0)
+        self.assertTrue(len(self.file.getvalue()) == 0)
+
+    def test_create(self):
+        """Test that create function creates an instance and prints id"""
+        console = self.create()
+        console.onecmd("create BaseModel")
+        self.assertTrue(
+            "BaseModel." + self.file.getvalue()[:-1] in self.objects.keys())
 
     def test_all(self):
-        """Test all exists"""
+        """Test all method"""
         console = self.create()
+        sys.stdout= self.backup
+        console.onecmd("create User")
+        console.onecmd("create City")
+        console.onecmd("create State")
+        console.onecmd("create Place")
+        console.onecmd("create Review")
         console.onecmd("all")
         self.assertTrue(isinstance(self.file.getvalue(), str))
+        sys.stdout = self.file
+        console.onecmd("all BaseModel")
+        objects = self.file.getvalue().replace('\n', '').split('[')
+        objects = [i for i in objects if i!= '']
+        self.assertTrue(all("BaseModel" in i for i in objects))
+        sys.stdout = self.backup
+        self.file.close()
+        self.file = StringIO()
+        sys.stdout = self.file
+        console.onecmd("City.all()")
+        objects = self.file.getvalue().replace('\n', '').split('[')
+        objects = [i for i in objects if i!= '']
+        self.assertTrue(all("City" in i for i in objects))
 
     def test_show(self):
         """Testing that show exists"""
@@ -103,12 +138,6 @@ class TestConsole(unittest.TestCase):
         x = (self.file.getvalue())
         sys.stdout = self.backup
         self.assertEqual("** no instance found **\n", x)
-
-    def test_create(self):
-        """Test that create works"""
-        console = self.create()
-        console.onecmd("create User")
-        self.assertTrue(isinstance(self.file.getvalue(), str))
 
     def test_class_name(self):
         """Testing the error messages for class name missing"""

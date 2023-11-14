@@ -24,7 +24,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, line):
         """
-        Creates a new instance of BaseModel
+        Creates a new instance of Model if the model exists,
         saves to JSON file and prints to console
         """
         if not line:
