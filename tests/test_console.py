@@ -61,7 +61,7 @@ class TestConsole(unittest.TestCase):
     def test_all(self):
         """Test all method"""
         console = self.create()
-        sys.stdout= self.backup
+        sys.stdout = self.backup
         console.onecmd("create User")
         console.onecmd("create City")
         console.onecmd("create State")
@@ -72,7 +72,7 @@ class TestConsole(unittest.TestCase):
         sys.stdout = self.file
         console.onecmd("all BaseModel")
         objects = self.file.getvalue().replace('\n', '').split('[')
-        objects = [i for i in objects if i!= '']
+        objects = [i for i in objects if i != '']
         self.assertTrue(all("BaseModel" in i for i in objects))
         sys.stdout = self.backup
         self.file.close()
@@ -80,7 +80,7 @@ class TestConsole(unittest.TestCase):
         sys.stdout = self.file
         console.onecmd("City.all()")
         objects = self.file.getvalue().replace('\n', '').split('[')
-        objects = [i for i in objects if i!= '']
+        objects = [i for i in objects if i != '']
         self.assertTrue(all("City" in i for i in objects))
 
     def test_show(self):
@@ -152,3 +152,11 @@ class TestConsole(unittest.TestCase):
         console.onecmd("create Binita")
         x = (self.file.getvalue())
         self.assertEqual("** class doesn't exist **\n", x)
+
+    def test_destroy(self):
+        console = self.create()
+        self.assertIsNone(console.onecmd("destroy"))
+
+    def test_update(self):
+        console = self.create()
+        self.assertIsNone(console.onecmd("update"))
