@@ -3,7 +3,7 @@
 import cmd
 import json
 import models
-import shlex
+from ast import literal_eval
 
 
 class HBNBCommand(cmd.Cmd):
@@ -45,7 +45,7 @@ class HBNBCommand(cmd.Cmd):
         if not line:
             print("** class name missing **")
             return
-        args = line.split(' ')
+        args = line.split()
         if args[0] not in models.classes:
             print("** class doesn't exist **")
             return
@@ -65,7 +65,7 @@ class HBNBCommand(cmd.Cmd):
         if not line:
             print("** class name missing **")
             return
-        args = line.split(' ')
+        args = line.split()
         if args[0] not in models.classes:
             print("** class doesn't exist **")
         elif len(args) == 1:
@@ -81,7 +81,7 @@ class HBNBCommand(cmd.Cmd):
             for v in list(models.storage.all().values()):
                 print(v)
         else:
-            args = line.split(' ')
+            args = line.split()
             if args[0] not in models.classes:
                 print("** class doesn't exist **")
             else:
@@ -93,39 +93,36 @@ class HBNBCommand(cmd.Cmd):
         if not line:
             print("** class name missing **")
             return
-        models.storage.reload()
-        if '{' in line and '}' in line:
-            args, a_dict = line.split('{'), {}
-        else:
-            args, a_dict = line.split(' '), None
-        if a_dict is not None:
-            a_dict, args1 = json.loads("{" + args[1]), args[0].split(' ')
-            print(args1)
-        else:
-            args1 = args
-        if args1[0] not in list(models.classes.keys()):
+        cut = None if '{' not in line else line.index('{')
+        args = line.split() if cut is None else line[:cut].split()
+        # print(args)
+        if args[0] not in list(models.classes.keys()):
             print("** class doesn't exist **")
-        elif len(args1) <= 1:
+        elif len(args) <= 1:
             print("** instance id missing **")
-        elif ".".join(args1[:2]) not in models.storage.all():
+        elif ".".join(args[:2]) not in models.storage.all():
             print("** no instance found **")
-        elif len(args1) <= 2 and a_dict is None:
+        elif len(args) <= 2 and cut is None:
             print("** attribute name missing **")
-        elif len(args1) <= 3 and a_dict is None:
+        elif len(args) <= 3 and cut is None:
             print("** value missing **")
-        elif len(args1) == 3 and len(a_dict) > 0:
-            for (k, v) in a_dict.items():
-                setattr(
-                    models.storage.all()[".".join(args1[:2])], k, v)
-            models.storage.save()
         else:
-            setattr(
-                models.storage.all()[".".join(args1[:2])], args1[2], args1[3])
-            models.storage.save()
+            model = models.storage.all()[".".join(args[:2])]
+            if cut is not None:
+                try:
+                    # print(json.loads(line[cut:]))
+                    for (k, v) in json.loads(line[cut:]).items():
+                        setattr(model, k, v)
+                    model.save()
+                except Exception:
+                    print("** attribute name missing **")
+            else:
+                setattr(model, args[2], args[3])
+                model.save()
 
     def do_count(self, line):
         """Retrieve the number of instances of a class"""
-        args = line.split(' ')
+        args = line.split()
         if args[0] not in models.classes:
             print("** class doesn't exist **")
         else:
@@ -143,7 +140,12 @@ class HBNBCommand(cmd.Cmd):
         model = args[0]
         args1 = args[1].split('(')
         method = args1[0]
-        arguments = args1[1].replace(')', '').replace(',', '')
+        arguments = args1[1].replace(')', '')
+        cut = arguments.index('{') if '{' in arguments else None
+        if cut is not None:
+            part1 = arguments[:cut].replace(',', '')
+            part2 = arguments[cut:].replace("'", '"')
+            arguments = part1 + part2
         if model in models.classes and method in methods:
             if len(arguments) == 0:
                 methods[method](model)
