@@ -95,6 +95,7 @@ class HBNBCommand(cmd.Cmd):
             return
         cut = None if '{' not in line else line.index('{')
         args = line.split() if cut is None else line[:cut].split()
+        print(args)
         if args[0] not in list(models.classes.keys()):
             print("** class doesn't exist **")
         elif len(args) <= 1:
@@ -145,6 +146,8 @@ class HBNBCommand(cmd.Cmd):
             part1 = arguments[:cut].replace(',', '')
             part2 = arguments[cut:].replace("'", '"')
             arguments = part1 + part2
+        else:
+            arguments = arguments.replace(',', '')
         if model in models.classes and method in methods:
             if len(arguments) == 0:
                 methods[method](model)
