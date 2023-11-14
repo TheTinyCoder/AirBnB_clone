@@ -95,7 +95,6 @@ class HBNBCommand(cmd.Cmd):
             return
         cut = None if '{' not in line else line.index('{')
         args = line.split() if cut is None else line[:cut].split()
-        # print(args)
         if args[0] not in list(models.classes.keys()):
             print("** class doesn't exist **")
         elif len(args) <= 1:
@@ -118,7 +117,7 @@ class HBNBCommand(cmd.Cmd):
                     print("** attribute name missing **")
             else:
                 setattr(model, args[2], args[3])
-                model.save()
+                models.storage.save()
 
     def do_count(self, line):
         """Retrieve the number of instances of a class"""

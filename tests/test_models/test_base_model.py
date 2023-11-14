@@ -58,7 +58,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertNotEqual(
             datetime.now(), datetime(2023, 11, 13, 21, 7, 51, 973301))
         with freeze_time("2023-11-13 21:07:51.973301"):
-            # freeze time to return specific datetime 
+            # freeze time to return specific datetime
             # when datetime.now is called
             self.assertEqual(
                 datetime.now(), datetime(2023, 11, 13, 21, 7, 51, 973301))
