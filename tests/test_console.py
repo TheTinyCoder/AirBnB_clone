@@ -72,6 +72,7 @@ class TestConsole(unittest.TestCase):
         sys.stdout = self.backup
 
     def test_create(self):
+        """Test create method"""
         correct = "** class name missing **"
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("create"))
@@ -117,6 +118,7 @@ class TestConsole(unittest.TestCase):
             self.assertIn(testKey, storage.all().keys())
 
     def test_show(self):
+        """Test show method"""
         correct = "** class name missing **"
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("show"))
@@ -124,8 +126,6 @@ class TestConsole(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd(".show()"))
             self.assertEqual(correct, output.getvalue().strip())
-
-    def test_show_invalid_class(self):
         correct = "** class doesn't exist **"
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("show MyModel"))
@@ -133,8 +133,6 @@ class TestConsole(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("MyModel.show()"))
             self.assertEqual(correct, output.getvalue().strip())
-
-    def test_show_missing_id_space_notation(self):
         correct = "** instance id missing **"
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("show BaseModel"))
@@ -157,8 +155,6 @@ class TestConsole(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("show Review"))
             self.assertEqual(correct, output.getvalue().strip())
-
-    def test_show_missing_id_dot_notation(self):
         correct = "** instance id missing **"
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("BaseModel.show()"))
@@ -181,8 +177,6 @@ class TestConsole(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("Review.show()"))
             self.assertEqual(correct, output.getvalue().strip())
-
-    def test_show(self):
         correct = "** no instance found **"
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("show BaseModel 1"))
@@ -341,6 +335,7 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(obj.__str__(), output.getvalue().strip())
 
     def test_destroy(self):
+        """Test destroy method"""
         correct = "** class name missing **"
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("destroy"))
@@ -557,6 +552,7 @@ class TestConsole(unittest.TestCase):
             self.assertNotIn(obj, storage.all())
 
     def test_all(self):
+        """Test all method"""
         correct = "** class doesn't exist **"
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("all MyModel"))
@@ -672,6 +668,7 @@ class TestConsole(unittest.TestCase):
             self.assertNotIn("BaseModel", output.getvalue().strip())
 
     def test_update(self):
+        """Test update method"""
         correct = "** class name missing **"
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("update"))
@@ -912,6 +909,7 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(correct, output.getvalue().strip())
 
     def test_count(self):
+        """Test count method"""
         try:
             os.rename("file.json", "tmp")
         except IOError:
