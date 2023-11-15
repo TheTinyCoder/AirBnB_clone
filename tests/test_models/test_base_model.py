@@ -24,6 +24,10 @@ class TestBaseModel(unittest.TestCase):
         """Tear down class"""
         del self.base1
         del self.base2
+        try:
+            os.remove("file.json")
+        except Exception:
+            pass
 
     def test_instance(self):
         """Test that instance of base is initialized correctly"""
