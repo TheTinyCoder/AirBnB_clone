@@ -43,7 +43,7 @@ The console will display a prompt (hbnb) indicating that the user can write and 
   
   Documented commands (type help <topic>):
   ========================================
-  EOF  help  quit
+  EOF  all  count  create  destroy  help  quit  show  update
   
   (hbnb) 
   (hbnb) 
